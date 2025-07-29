@@ -97,3 +97,6 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Unity PackageCache 내부 파일 무시 (대형 바이너리 포함 가능)
+[Ll]ibrary/PackageCache/
