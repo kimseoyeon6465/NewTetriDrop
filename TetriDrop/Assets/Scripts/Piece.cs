@@ -95,7 +95,7 @@ public class Piece : MonoBehaviour
     private void Rotate(int direction)
     {
         int originalRotation = this.rotationIndex;
-        this.rotationIndex += Wrap(this.rotationIndex + direction, 0, 4);
+        this.rotationIndex = Wrap(this.rotationIndex + direction, 0, 4);
         ApplyRotationMatrix(direction);
         if (!TestWallKick(this.rotationIndex, direction))
         {
