@@ -988,6 +988,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 306836308}
+    - target: {fileID: 1121196271304459113, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1121196271490648728, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1024,6 +1028,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1783062704}
+    - target: {fileID: 1121196271490648732, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1121196271989381196, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1088,6 +1096,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 2010998230}
+    - target: {fileID: 1121196272046201118, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1121196272657575562, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1200,6 +1212,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1138383231}
+    - target: {fileID: 1121196272657575566, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1121196273357528596, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1000
@@ -1243,6 +1259,10 @@ PrefabInstance:
     - target: {fileID: 1121196273357528599, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
       propertyPath: m_Name
       value: Environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 1121196273385294848, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1121196273385294876, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1300,7 +1320,7 @@ GameObject:
   - component: {fileID: 731458840}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1334,6 +1354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84ac112a554b234d9691706fbf54147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Data>k__BackingField: {fileID: 11400000, guid: f3361530b4a143144b22213b2045fb0b, type: 2}
 --- !u!54 &731458838
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2037,6 +2058,8 @@ GameObject:
   - component: {fileID: 2064721833}
   - component: {fileID: 2064721832}
   - component: {fileID: 2064721831}
+  - component: {fileID: 2064721834}
+  - component: {fileID: 2064721835}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -2115,6 +2138,53 @@ Transform:
   - {fileID: 415530889}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2064721834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064721830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 65
+  m_IgnoreTag: Player
+  m_TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_MinimumDistanceFromTarget: 0.1
+  m_AvoidObstacles: 1
+  m_DistanceLimit: 0
+  m_MinimumOcclusionTime: 0
+  m_CameraRadius: 0.1
+  m_Strategy: 0
+  m_MaximumEffort: 4
+  m_SmoothingTime: 0
+  m_Damping: 0
+  m_DampingWhenOccluded: 0
+  m_OptimalTargetDistance: 0
+--- !u!114 &2064721835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064721830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f73493b45dc2040a541eecc12e0d81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultDistance: 6
+  minimumDistance: 1
+  maximumDistance: 6
+  smoothing: 4
+  zoomSensitivity: 1
 --- !u!43 &2086506260
 Mesh:
   m_ObjectHideFlags: 0

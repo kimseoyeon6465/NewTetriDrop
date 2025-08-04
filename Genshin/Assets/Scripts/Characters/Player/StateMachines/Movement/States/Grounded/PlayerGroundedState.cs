@@ -1,25 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace GenshinImpactMovementSystem
 {
-    public class PlayerRunningState : PlayerGroundedState
+    public class PlayerGroundedState : PlayerMovementState
     {
-        public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
-        {
+        public PlayerGroundedState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
+        { 
         }
-
-        #region IState Methods
-        public override void Enter()
-        {
-            base.Enter();
-            stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
-        }
-
-        #endregion
-
 
         #region Reusable Methods
 
@@ -37,19 +28,28 @@ namespace GenshinImpactMovementSystem
 
         }
 
+        protected virtual void OnMove()
+        {
+            if (shouldWalk)
+            {
+                stateMachine.ChangeState(stateMachine.WalkingState);
+                return;
+            }
+
+            stateMachine.ChangeState(stateMachine.RunningState);
+        }
+
         #endregion
 
         #region Input Methods
-        protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
-        {
-            base.OnWalkToggleStarted(context);
 
-            stateMachine.ChangeState(stateMachine.WalkingState);
+
+
+        protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.IdlingState);
         }
 
-
-
         #endregion
-
     }
 }
