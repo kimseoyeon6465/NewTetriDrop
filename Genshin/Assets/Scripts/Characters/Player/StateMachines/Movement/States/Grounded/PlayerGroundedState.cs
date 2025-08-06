@@ -69,7 +69,11 @@ namespace GenshinImpactMovementSystem
             base.AddInputActionsCallbacks();
 
             stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
+
+            stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted;
         }
+
+        
 
         protected override void RemoveInputActionsCallbacks()
         {
@@ -99,6 +103,11 @@ namespace GenshinImpactMovementSystem
         protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.IdlingState);
+        }
+
+        protected virtual void OnDashStarted(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.DashingState);
         }
 
         #endregion

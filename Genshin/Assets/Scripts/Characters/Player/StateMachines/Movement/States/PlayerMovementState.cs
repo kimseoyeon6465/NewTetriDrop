@@ -55,6 +55,18 @@ namespace GenshinImpactMovementSystem
         public virtual void Update()
         {
         }
+
+        public virtual void OnAnimationEnterEvent()
+        {
+        }
+
+        public virtual void OnAnimationExitEvent()
+        {
+        }
+
+        public virtual void OnAnimationTransitionEvent()
+        {
+        }
         #endregion
 
         #region Main Methods
@@ -214,6 +226,8 @@ namespace GenshinImpactMovementSystem
         {
             stateMachine.ReusableData.ShouldWalk = !stateMachine.ReusableData.ShouldWalk;
         }
+
+        
 
         #endregion
     }
