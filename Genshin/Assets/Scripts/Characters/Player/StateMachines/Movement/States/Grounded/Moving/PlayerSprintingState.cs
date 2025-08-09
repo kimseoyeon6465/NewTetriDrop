@@ -91,6 +91,11 @@ namespace GenshinImpactMovementSystem
             keepSprinting = true;
         }
 
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.HardStoppingState);
+        }
+
         #endregion
     }
 }

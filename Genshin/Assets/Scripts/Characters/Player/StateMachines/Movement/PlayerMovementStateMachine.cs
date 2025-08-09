@@ -18,6 +18,7 @@ namespace GenshinImpactMovementSystem
 
         public PlayerHardStoppingState HardStoppingState { get; }
 
+        public PlayerJumpingState JumpingState { get; }
         public PlayerMovementStateMachine(Player player)
         {
             Player = player;
@@ -31,6 +32,8 @@ namespace GenshinImpactMovementSystem
             LightStoppingState = new PlayerLightStoppingState(this);
             MediumStoppingState = new PlayerMediumStoppingState(this);  
             HardStoppingState = new PlayerHardStoppingState(this);
+        
+            JumpingState = new PlayerJumpingState(this);
         }
 
     }
