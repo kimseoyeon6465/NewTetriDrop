@@ -16,6 +16,16 @@ namespace GenshinImpactMovementSystem
         }
 
         #region IState Methods
+
+        public override void Enter()
+        {
+            base.Enter();
+
+            UpdateShouldSprintState();
+        }
+
+
+
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
@@ -25,6 +35,20 @@ namespace GenshinImpactMovementSystem
         #endregion
 
         #region Main Methods
+
+        private void UpdateShouldSprintState()
+        {
+            if (!stateMachine.ReusableData.ShouldSprint)
+            {
+                return;
+            }
+            if (stateMachine.ReusableData.MovementInput != Vector2.zero)
+            {
+                return;
+            }
+
+            stateMachine.ReusableData.ShouldSprint = false;
+        }
         private void Float()
         {
             Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
@@ -35,18 +59,18 @@ namespace GenshinImpactMovementSystem
                 float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
                 float slopeSpeedModifier = SetSlopeSpeeddModifierOnAngle(groundAngle);
 
-                if (slopeSpeedModifier == 0f || groundAngle >0f)// 내가 수정
+                if (slopeSpeedModifier == 0f)// 내가 수정
                 {
                     return;
                 }
-                
+
                 float distanceToFloatingPoint = stateMachine.Player.ColliderUtility.CapsuleColliderData.ColliderCenterInLocalSpace.y * stateMachine.Player.transform.localScale.y - hit.distance;
                 if (distanceToFloatingPoint == 0f)
                 {
                     return;
                 }
                 float amountToLift = distanceToFloatingPoint * slopeData.StepReachForce - GetPlayerVerticalVelocity().y;
-            
+
                 Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
 
                 stateMachine.Player.Rigidbody.AddForce(liftForce, ForceMode.VelocityChange);
@@ -60,6 +84,7 @@ namespace GenshinImpactMovementSystem
             return slopeSpeedModifier;
         }
 
+
         #endregion
 
         #region Reusable Methods
@@ -71,19 +96,29 @@ namespace GenshinImpactMovementSystem
             stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
 
             stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted;
+
+            stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
+
         }
 
-        
+
 
         protected override void RemoveInputActionsCallbacks()
         {
             base.RemoveInputActionsCallbacks();
             stateMachine.Player.Input.PlayerActions.Movement.canceled -= OnMovementCanceled;
+            stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted;
+            stateMachine.Player.Input.PlayerActions.Jump.started -= OnJumpStarted;
 
         }
 
         protected virtual void OnMove()
         {
+            if (stateMachine.ReusableData.ShouldSprint)
+            {
+                stateMachine.ChangeState(stateMachine.SprintingState);
+                return;
+            }
             if (stateMachine.ReusableData.ShouldWalk)
             {
                 stateMachine.ChangeState(stateMachine.WalkingState);
@@ -108,6 +143,11 @@ namespace GenshinImpactMovementSystem
         protected virtual void OnDashStarted(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.DashingState);
+        }
+
+        protected virtual void OnJumpStarted(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.JumpingState);
         }
 
         #endregion

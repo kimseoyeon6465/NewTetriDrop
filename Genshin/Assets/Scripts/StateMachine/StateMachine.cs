@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 namespace GenshinImpactMovementSystem
 {
     public abstract class StateMachine
@@ -39,6 +41,11 @@ namespace GenshinImpactMovementSystem
         public void OnAnimationTransitionEvent()
         {
             currentState?.OnAnimationTransitionEvent();
+        }
+
+        public void OnTriggerEnter(Collider collider)
+        {
+            currentState.OnTriggerEnter(collider);
         }
     }
 }

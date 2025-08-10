@@ -12,11 +12,14 @@ namespace GenshinImpactMovementSystem
 
         protected PlayerGroundedData movementData;
 
+        protected PlayerAirborneData airborneData;
+
         public PlayerMovementState(PlayerMovementStateMachine playerMovementStateMachine)
         {
             stateMachine = playerMovementStateMachine;
 
             movementData = stateMachine.Player.Data.GroundedData;
+            airborneData = stateMachine.Player.Data.AirborneData;
 
             InitializeData();
         }
@@ -26,7 +29,7 @@ namespace GenshinImpactMovementSystem
             SetBaseRotationData();
         }
 
-        
+
         #region IState Methods
         public virtual void Enter()
         {
@@ -35,14 +38,14 @@ namespace GenshinImpactMovementSystem
             AddInputActionsCallbacks();
         }
 
-        
+
 
         public virtual void Exit()
         {
             RemoveInputActionsCallbacks();
         }
 
-        
+
 
         public virtual void HandleInput()
         {
@@ -71,6 +74,18 @@ namespace GenshinImpactMovementSystem
         public virtual void OnAnimationTransitionEvent()
         {
         }
+
+        public virtual void OnTriggerEnter(Collider collider)
+        {
+            if(stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+            {
+                OnContactWithGround(collider);
+
+                return;
+            }
+        }
+
+        
         #endregion
 
         #region Main Methods
@@ -94,7 +109,7 @@ namespace GenshinImpactMovementSystem
             stateMachine.Player.Rigidbody.AddForce(targetRotationDirection * movementSpeed - currentPlayerHorizontalVelocity, ForceMode.VelocityChange);
         }
 
-        
+
 
         private float Rotate(Vector3 direction)
         {
@@ -105,7 +120,7 @@ namespace GenshinImpactMovementSystem
             return directionAngle;
         }
 
-        
+
 
         private float GetDirectionAngle(Vector3 direction)
         {
@@ -204,7 +219,7 @@ namespace GenshinImpactMovementSystem
             {
                 UpdateTargetRotationData(directionAngle);
             }
-            
+
             return directionAngle;
         }
 
@@ -223,7 +238,7 @@ namespace GenshinImpactMovementSystem
             stateMachine.Player.Input.PlayerActions.WalkToggle.started += OnWalkToggleStarted;
         }
 
-        
+
 
         protected virtual void RemoveInputActionsCallbacks()
         {
@@ -237,6 +252,13 @@ namespace GenshinImpactMovementSystem
 
         }
 
+        protected void DecelerateVertically()
+        {
+            Vector3 playerVerticalVelocity = GetPlayerHorizontalVelocity();
+            stateMachine.Player.Rigidbody.AddForce(-playerVerticalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
+
+        }
+
         protected bool IsMovingHorizontally(float minimumMagnitude = 0.1f)
         {
             Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
@@ -246,7 +268,20 @@ namespace GenshinImpactMovementSystem
             return playerHorizontalMovement.magnitude > minimumMagnitude;
         }
 
+        protected bool IsMovingUp(float minimumVelocity = 0.1f)
+        {
+            return GetPlayerHorizontalVelocity().y > minimumVelocity;
+        }
 
+        protected bool IsMovingDown(float minimumVelocity = 0.1f)
+        {
+            return GetPlayerHorizontalVelocity().y < -minimumVelocity;
+        }
+
+        protected virtual void OnContactWithGround(Collider collider)
+        {
+
+        }
         #endregion
 
         #region Input Methods
@@ -256,7 +291,9 @@ namespace GenshinImpactMovementSystem
             stateMachine.ReusableData.ShouldWalk = !stateMachine.ReusableData.ShouldWalk;
         }
 
-        
+
+
+
 
         #endregion
     }
