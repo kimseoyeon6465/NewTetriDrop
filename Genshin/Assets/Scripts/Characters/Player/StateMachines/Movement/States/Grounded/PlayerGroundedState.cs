@@ -84,6 +84,13 @@ namespace GenshinImpactMovementSystem
             return slopeSpeedModifier;
         }
 
+        private bool IsThereGroundUnderneath()
+        {
+            BoxCollider groundCheckCollider = stateMachine.Player.ColliderUtility.TriggerColliderData.GroundCheckCollider;
+            Vector3 groundColliderCenterInWorldSpace = groundCheckCollider.bounds.center;
+            Collider[] overlappedGroundColliders = Physics.OverlapBox(groundColliderCenterInWorldSpace, groundCheckCollider.bounds.extents, groundCheckCollider.transform.rotation, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
+            return overlappedGroundColliders.Length > 0;
+        } 
 
         #endregion
 
@@ -92,6 +99,7 @@ namespace GenshinImpactMovementSystem
         protected override void AddInputActionsCallbacks()
         {
             base.AddInputActionsCallbacks();
+            //Debug.Log("[GroundedState] Input callbacks added");
 
             stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
 
@@ -128,7 +136,28 @@ namespace GenshinImpactMovementSystem
 
             stateMachine.ChangeState(stateMachine.RunningState);
         }
+        protected override void OnContactWithGroundExited(Collider collider)
+        {
+            base.OnContactWithGroundExited(collider);
+            if (IsThereGroundUnderneath())
+            {
+                return;
+            }
+            Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
+            Ray downwardsRayFromCapsuleBottom = new Ray(capsuleColliderCenterInWorldSpace - stateMachine.Player.ColliderUtility.CapsuleColliderData.ColliderVerticalExtents, Vector3.down);
+            if (!Physics.Raycast(downwardsRayFromCapsuleBottom, out _, movementData.GroundToFallRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))//out _는 변수 버림, 뭐랑 충돌했는지 정보는 저장하지 않음
+            {
+                OnFall();
 
+            }
+        }
+
+        
+
+        protected virtual void OnFall()
+        {
+            stateMachine.ChangeState(stateMachine.FallingState);
+        }
         #endregion
 
         #region Input Methods

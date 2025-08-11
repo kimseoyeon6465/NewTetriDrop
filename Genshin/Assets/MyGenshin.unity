@@ -1117,6 +1117,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1121196271989381040, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1121196271989381196, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1345,6 +1349,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 1121196273357528599, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1121196273385294848, guid: f1fe0392276c46f4b9beca907a5319e1, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -1450,6 +1458,8 @@ MonoBehaviour:
       <StepHeightPercentage>k__BackingField: 0.25
       <FloatRayDistance>k__BackingField: 2
       <StepReachForce>k__BackingField: 2
+    <TriggerColliderData>k__BackingField:
+      <GroundCheckCollider>k__BackingField: {fileID: 1566705}
   <LayerData>k__BackingField:
     <GroundLayer>k__BackingField:
       serializedVersion: 2

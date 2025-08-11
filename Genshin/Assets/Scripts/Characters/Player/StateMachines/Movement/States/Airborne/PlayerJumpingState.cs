@@ -10,6 +10,7 @@ namespace GenshinImpactMovementSystem
 
         private PlayerJumpData jumpData;
         private bool shouldKeepRotating;
+        private bool canStartFalling;
 
         public PlayerJumpingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
@@ -23,7 +24,7 @@ namespace GenshinImpactMovementSystem
 
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
             stateMachine.ReusableData.MovementDecelerationForce = jumpData.DecelerationForce;
-            
+
             shouldKeepRotating = stateMachine.ReusableData.MovementInput != Vector2.zero;
             Jump();
         }
@@ -32,6 +33,22 @@ namespace GenshinImpactMovementSystem
             base.Exit();
 
             SetBaseRotationData();
+
+            canStartFalling = false;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (!canStartFalling && IsMovingUp(0f))
+            {
+                canStartFalling = true;
+            }
+            if (!canStartFalling || GetPlayerVerticalVelocity().y > 0)
+            {
+                return;
+            }
+            stateMachine.ChangeState(stateMachine.FallingState);
         }
         public override void PhysicsUpdate()
         {
@@ -42,7 +59,7 @@ namespace GenshinImpactMovementSystem
                 RotateTowardsTargetRotation();
             }
 
-            if(IsMovingUp())
+            if (IsMovingUp())
             {
                 DecelerateVertically();
             }
@@ -54,6 +71,13 @@ namespace GenshinImpactMovementSystem
         {
 
         }
+
+        //protected override void OnContactWithGround(Collider collider)
+        //{
+
+        //}
+
+
         #endregion
 
         #region Main Methods

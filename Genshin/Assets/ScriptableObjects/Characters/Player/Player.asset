@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <GroundedData>k__BackingField:
     <BaseSpeed>k__BackingField: 5
+    <GroundToFallRayDistance>k__BackingField: 1
     <SlopeSpeedAnles>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -225,3 +226,5 @@ MonoBehaviour:
       <MediumForce>k__BackingField: {x: 3.5, y: 5, z: 3.5}
       <StrongForce>k__BackingField: {x: 5, y: 5, z: 5}
       <DecelerationForce>k__BackingField: 1.5
+    <FallData>k__BackingField:
+      <FallSpeedLimit>k__BackingField: 15

@@ -16,7 +16,7 @@ namespace GenshinImpactMovementSystem
         public override void Enter()
         {
             base.Enter();
-
+            Debug.Log("[IdleState] Enter");
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StationaryForce;
             ResetVelocity();
