@@ -7,6 +7,7 @@ namespace GenshinImpactMovementSystem
 {
     public class PlayerFallingState : PlayerAirborneState
     {
+        private Vector3 playerPositionOnEnter;
         private PlayerFallData fallData;
         public PlayerFallingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
@@ -17,6 +18,8 @@ namespace GenshinImpactMovementSystem
         public override void Enter()
         {
             base.Enter();
+
+            playerPositionOnEnter = stateMachine.Player.transform.position;
 
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
@@ -37,12 +40,22 @@ namespace GenshinImpactMovementSystem
         {
         }
 
-        //protected override void OnContactWithGround(Collider collider)
-        //{
-        //    Debug.Log("[FallingState] Ground contact detected ¡æ Idle");
-        //    base.OnContactWithGround(collider);
-        //    stateMachine.ChangeState(stateMachine.IdlingState);
-        //}
+        protected override void OnContactWithGround(Collider collider)
+        {
+            float fallDistance = Mathf.Abs(playerPositionOnEnter.y - stateMachine.Player.transform.position.y);
+            if(fallDistance < fallData.MinimiumDistanceToBeConsideredHardFall)
+            {
+                stateMachine.ChangeState(stateMachine.LightLandingState);
+                return;
+            }
+            
+            if(stateMachine.ReusableData.ShouldWalk && !stateMachine.ReusableData.ShouldSprint || stateMachine.ReusableData.MovementInput ==Vector2.zero)
+            {
+                stateMachine.ChangeState(stateMachine.HardLandingState);
+                return;
+            }
+            stateMachine.ChangeState(stateMachine.RollingState);
+        }
 
         #endregion
 
