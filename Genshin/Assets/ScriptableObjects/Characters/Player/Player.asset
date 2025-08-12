@@ -15,6 +15,20 @@ MonoBehaviour:
   <GroundedData>k__BackingField:
     <BaseSpeed>k__BackingField: 5
     <GroundToFallRayDistance>k__BackingField: 1
+    <SidewaysCameraRecenteringData>k__BackingField:
+    - <MinimumAngle>k__BackingField: 0
+      <MaximumAngle>k__BackingField: 80
+      <WaitTime>k__BackingField: -1
+      <RecenteringTime>k__BackingField: -1
+    - <MinimumAngle>k__BackingField: 80
+      <MaximumAngle>k__BackingField: 90
+      <WaitTime>k__BackingField: 0
+      <RecenteringTime>k__BackingField: 0.3
+    <BackwardsCameraRecenteringData>k__BackingField:
+    - <MinimumAngle>k__BackingField: 80
+      <MaximumAngle>k__BackingField: 90
+      <WaitTime>k__BackingField: 0
+      <RecenteringTime>k__BackingField: 0.5
     <SlopeSpeedAnles>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -105,6 +119,8 @@ MonoBehaviour:
       <LightDecelerationForce>k__BackingField: 5
       <MediumDecelerationForce>k__BackingField: 6.5
       <HardDecelerationForce>k__BackingField: 5
+    <RollData>k__BackingField:
+      <SpeedModifier>k__BackingField: 1
   <AirborneData>k__BackingField:
     <JumpData>k__BackingField:
       <RotationData>k__BackingField:
@@ -228,3 +244,4 @@ MonoBehaviour:
       <DecelerationForce>k__BackingField: 1.5
     <FallData>k__BackingField:
       <FallSpeedLimit>k__BackingField: 15
+      <MinimiumDistanceToBeConsideredHardFall>k__BackingField: 3
