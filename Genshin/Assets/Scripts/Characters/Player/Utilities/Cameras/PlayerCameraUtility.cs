@@ -18,7 +18,7 @@ namespace GenshinImpactMovementSystem
             cinemachinePOV = VirtualCamera.GetCinemachineComponent<CinemachinePOV>();
         }
 
-        public void EnableRecentering(float waitTime = -1f, float recenteringTime = -1f)
+        public void EnableRecentering(float waitTime = -1f, float recenteringTime = -1f, float baseMovementSpeed =1f, float movementSpeed = 1f)
         {
             cinemachinePOV.m_HorizontalRecentering.m_enabled = true;
 
@@ -34,9 +34,9 @@ namespace GenshinImpactMovementSystem
                 recenteringTime = DefaultHorizontalRecenteringTime;
             }
 
+            recenteringTime = recenteringTime* baseMovementSpeed / movementSpeed;
             cinemachinePOV.m_HorizontalRecentering.m_WaitTime = waitTime;
             cinemachinePOV.m_HorizontalRecentering.m_RecenteringTime = recenteringTime;
-            //6:55:36 타임라인
         }
 
         public void DisableRecentering() 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GenshinImpactMovementSystem
 {
@@ -89,6 +90,7 @@ namespace GenshinImpactMovementSystem
 
             if (shouldKeepRotating)
             {
+                UpdateTargetRotation(GetMovementInputDirection());
                 jumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
             }
             jumpForce.x *= jumpDirection.x;
@@ -121,5 +123,13 @@ namespace GenshinImpactMovementSystem
         }
         #endregion
 
+        #region Input Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+        }
+
+
+
+        #endregion
     }
 }

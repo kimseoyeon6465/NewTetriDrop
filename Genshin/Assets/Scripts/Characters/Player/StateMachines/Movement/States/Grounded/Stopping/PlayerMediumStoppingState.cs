@@ -13,9 +13,9 @@ namespace GenshinImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
+            stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.MediumDecelerationForce;
             base.Enter();
 
-            stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.MediumDecelerationForce;
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.MediumForce;
 

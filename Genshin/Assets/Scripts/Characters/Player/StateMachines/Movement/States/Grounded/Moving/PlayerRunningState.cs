@@ -19,8 +19,8 @@ namespace GenshinImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
-            base.Enter();
             stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
+            base.Enter();
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.MediumForce;
 
 
@@ -89,7 +89,11 @@ namespace GenshinImpactMovementSystem
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.MediumStoppingState);
+
+            base.OnMovementCanceled(context);
+
         }
+
 
         #endregion
 
