@@ -139,7 +139,7 @@ namespace GenshinImpactMovementSystem
 
         private float GetDirectionAngle(Vector3 direction)
         {
-            float directionAngle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
+            float directionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;//회전 수정
 
             if (directionAngle < 0f)
             {
@@ -299,7 +299,7 @@ namespace GenshinImpactMovementSystem
 
         protected void DecelerateVertically()
         {
-            Vector3 playerVerticalVelocity = GetPlayerHorizontalVelocity();
+            Vector3 playerVerticalVelocity = GetPlayerVerticalVelocity();
             stateMachine.Player.Rigidbody.AddForce(-playerVerticalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
 
         }
@@ -315,12 +315,12 @@ namespace GenshinImpactMovementSystem
 
         protected bool IsMovingUp(float minimumVelocity = 0.1f)
         {
-            return GetPlayerHorizontalVelocity().y > minimumVelocity;
+            return GetPlayerVerticalVelocity().y > minimumVelocity;
         }
 
         protected bool IsMovingDown(float minimumVelocity = 0.1f)
         {
-            return GetPlayerHorizontalVelocity().y < -minimumVelocity;
+            return GetPlayerVerticalVelocity().y < -minimumVelocity;
         }
 
         protected virtual void OnContactWithGround(Collider collider)
