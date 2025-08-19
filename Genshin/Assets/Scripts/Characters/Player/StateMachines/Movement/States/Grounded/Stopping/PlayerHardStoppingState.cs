@@ -15,12 +15,20 @@ namespace GenshinImpactMovementSystem
         {
             stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.HardDecelerationForce;
             base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.HardStopParameterHash);
 
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
 
         }
 
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.HardStopParameterHash);
+
+        }
         #endregion
 
         #region Reusable Methods

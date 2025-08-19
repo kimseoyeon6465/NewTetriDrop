@@ -25,6 +25,7 @@ namespace GenshinImpactMovementSystem
             stateMachine.ReusableData.MovementSpeedModifier = movementData.DashData.SpeedModifier;
             base.Enter();
 
+            StartAnimation(stateMachine.Player.AnimationData.DashParameterHash);
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
 
@@ -43,6 +44,7 @@ namespace GenshinImpactMovementSystem
         public override void Exit()
         {
             base.Exit();
+            StopAnimation(stateMachine.Player.AnimationData.DashParameterHash);
 
             SetBaseRotationData();
         }
@@ -87,7 +89,7 @@ namespace GenshinImpactMovementSystem
             {
                 consecutiveDashesUsed = 0;
 
-                stateMachine.Player.Input.DisableActionFor(stateMachine.Player.Input.PlayerActions.Dash, dashData.DashLimitReachedCooledown);
+                stateMachine.Player.Input.DisableActionFor(stateMachine.Player.Input.PlayerActions.Dash, dashData.DashLimitReachedCooldown);
             }
         }
 
@@ -131,18 +133,21 @@ namespace GenshinImpactMovementSystem
             stateMachine.Player.Input.PlayerActions.Movement.performed -= OnMovementPerformed;
 
         }
+
+        protected override void OnMovementPerformed(InputAction.CallbackContext context)
+        {
+            base.OnMovementPerformed(context);
+
+            shouldKeepRotating = true;
+        }
+
         #endregion
         #region Input Methods
 
-       
+
         protected override void OnDashStarted(InputAction.CallbackContext context)
         {
             
-        }
-
-        private void OnMovementPerformed(InputAction.CallbackContext context)
-        {
-            shouldKeepRotating = true;
         }
 
         #endregion
