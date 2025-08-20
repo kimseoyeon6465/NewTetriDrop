@@ -1,0 +1,48 @@
+# Unity 기본 캐시/빌드 폴더 무시
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+*.log
+
+# Visual Studio 관련
+.vs/
+*.csproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Jetbrains Rider 관련
+.idea/
+*.DotSettings.user
+
+# Crash/테스트/Addressables/Generated
+crashlytics-build.properties
+InitTestScene*.unity*
+/Assets/AddressableAssetsData/link.xml
+/Assets/StreamingAssets/aa*
+/Assets/Unity.VisualScripting.Generated/
+
+# Mac/Windows 시스템 파일
+.DS_Store
+Thumbs.db
+
+# 빌드 결과물
+*.apk
+*.aab
+*.app
+*.unitypackage
+/Genshin/Assets/Scripts/Characters/Player/StateMachines/Movement/States/Grounded/Moving/PlayerDashingState.cs
