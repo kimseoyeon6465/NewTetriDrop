@@ -7,6 +7,20 @@ public class Projectile : MonoBehaviour
 {
     public LayerMask collisionMask;
     float speed = 10;
+    float damage = 1;
+
+    float lifeTime = 3;
+    float skinWidth = .1f;
+    private void Start()
+    {
+        Destroy(gameObject, lifeTime);
+
+        Collider[] initialCollisions = Physics.OverlapSphere(transform.position, .1f, collisionMask);
+        if (initialCollisions.Length > 0)
+        {
+            OnHitObject(initialCollisions[0]);
+        }
+    }
     public void SetSpeed(float newSpeed)
     {
         speed = newSpeed;
@@ -15,7 +29,7 @@ public class Projectile : MonoBehaviour
     {
         float moveDistance = speed * Time.deltaTime;
         CheckCollisions(moveDistance);
-        transform.Translate(Vector3.forward* moveDistance);
+        transform.Translate(Vector3.forward * moveDistance);
     }
 
     void CheckCollisions(float moveDistance)
@@ -23,7 +37,7 @@ public class Projectile : MonoBehaviour
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, moveDistance, collisionMask, QueryTriggerInteraction.Collide)) 
+        if (Physics.Raycast(ray, out hit, moveDistance + skinWidth, collisionMask, QueryTriggerInteraction.Collide))
         {
             OnHitObject(hit);
         }
@@ -31,7 +45,22 @@ public class Projectile : MonoBehaviour
 
     void OnHitObject(RaycastHit hit)
     {
-        print(hit.collider.gameObject.name);
+        //print(hit.collider.gameObject.name);
+        IDamagable damagableObject = hit.collider.GetComponent<IDamagable>();
+        if (damagableObject != null)
+        {
+            damagableObject.TakeHit(damage, hit);
+        }
+        GameObject.Destroy(gameObject);
+    }
+    //Raycast 를 쓰지 않는 메소드 생성
+    void OnHitObject(Collider c)
+    {
+        IDamagable damagableObject = c.GetComponent<IDamagable>();
+        if (damagableObject != null)
+        {
+            damagableObject.TakeDamage(damage);
+        }
         GameObject.Destroy(gameObject);
     }
 }
