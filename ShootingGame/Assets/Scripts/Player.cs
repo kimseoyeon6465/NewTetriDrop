@@ -7,6 +7,9 @@ using UnityEngine;
 public class Player : LivingEntity
 {//LivingEntity는 Monobehavior, IDamagable 상속중
     public float moveSpeed = 5;
+
+    public Transform crosshairs;
+
     Camera viewCamera;
     PlayerController controller;
     GunController gunController;
@@ -14,7 +17,7 @@ public class Player : LivingEntity
     {
         base.Start();
         controller = GetComponent<PlayerController>();
-        gunController = GetComponent<GunController>();  
+        gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
     }
 
@@ -22,25 +25,32 @@ public class Player : LivingEntity
     {
         //Movement input
         Vector3 moveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        Vector3 moveVelocity = moveInput.normalized * moveSpeed;    
+        Vector3 moveVelocity = moveInput.normalized * moveSpeed;
         controller.Move(moveVelocity);
-        
+
         //Look input
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
         //Ray로 마우스가 클릭한 위치 알 수 있음
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.up * gunController.GunHeight);
         float rayDistance;
         if (groundPlane.Raycast(ray, out rayDistance))
         {
             Vector3 point = ray.GetPoint(rayDistance);
             //Debug.DrawLine(ray.origin, point, Color.red);
             controller.LookAt(point);
+            crosshairs.position = point;
         }
         //weapon input
 
-        if(Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
-            gunController.Shoot();
+            gunController.OnTriggerHold();
         }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            gunController.OnTriggerRelease();
+        }
+
     }
 }

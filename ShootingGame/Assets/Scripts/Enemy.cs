@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class Enemy : LivingEntity
 {
     public enum State { Idle, Chasing, Attacking };
     State currentState;
+
+    public ParticleSystem deathEffect;
+
     NavMeshAgent pathfinder;
     Transform target;
     LivingEntity targetEntity;
@@ -25,30 +29,49 @@ public class Enemy : LivingEntity
     float targetCollisionRadius;
 
     bool hasTarget;
-
-    protected override void Start()//LivingEntity의 Start(), Enemy의 Start() 둘 다 필요하니까 virtual, override 각각 추가
+    private void Awake()
     {
-        base.Start();//LivingEntity의 Start() 호출
         pathfinder = GetComponent<NavMeshAgent>();
-        skinMaterial = GetComponent<Renderer>().material;
-        originalColour = skinMaterial.color;
+
 
         if (GameObject.FindGameObjectWithTag("Player") != null)
         {
 
-            currentState = State.Chasing;
             hasTarget = true;
 
             target = GameObject.FindGameObjectWithTag("Player").transform;
             targetEntity = target.GetComponent<LivingEntity>();
-            targetEntity.OnDeath += OnTargetDeath;
 
             myCollisionRadius = GetComponent<CapsuleCollider>().radius;
             targetCollisionRadius = target.GetComponent<CapsuleCollider>().radius;
+        }
+    }
+    protected override void Start()//LivingEntity의 Start(), Enemy의 Start() 둘 다 필요하니까 virtual, override 각각 추가
+    {
+        base.Start();//LivingEntity의 Start() 호출
+
+
+        if (hasTarget)
+        {
+
+            currentState = State.Chasing;
+
+
+            targetEntity.OnDeath += OnTargetDeath;
+
+
             StartCoroutine(UpdatePath());
         }
     }
 
+    public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
+    {
+        if (damage >= health)
+        {
+            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
+        }
+        base.TakeHit(damage, hitPoint, hitDirection);
+    }
     void OnTargetDeath()
     {
         hasTarget = false;
@@ -89,7 +112,7 @@ public class Enemy : LivingEntity
 
         while (percent <= 1)
         {
-            if(percent >= .5f && !hasAppliedDamage)
+            if (percent >= .5f && !hasAppliedDamage)
             {
                 hasAppliedDamage = true;
                 targetEntity.TakeDamage(damage);
@@ -123,5 +146,20 @@ public class Enemy : LivingEntity
             }
             yield return new WaitForSeconds(refreshRate);//1초마다 반복
         }
+    }
+
+    internal void SetCharacteristics(float moveSpeed, int hitsToKillPlayer, float enemyHealth, Color skinColour)
+    {
+        pathfinder.speed = moveSpeed;
+
+        if (hasTarget)
+        {
+            damage = Mathf.Ceil(targetEntity.startingHealth / hitsToKillPlayer);
+        }
+        startingHealth = enemyHealth;
+
+        skinMaterial = GetComponent<Renderer>().material;
+        skinMaterial.color = skinColour;
+        originalColour = skinMaterial.color;
     }
 }

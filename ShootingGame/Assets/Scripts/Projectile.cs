@@ -6,6 +6,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public LayerMask collisionMask;
+    public Color trailColour;
     float speed = 10;
     float damage = 1;
 
@@ -18,8 +19,10 @@ public class Projectile : MonoBehaviour
         Collider[] initialCollisions = Physics.OverlapSphere(transform.position, .1f, collisionMask);
         if (initialCollisions.Length > 0)
         {
-            OnHitObject(initialCollisions[0]);
+            OnHitObject(initialCollisions[0], transform.position);
         }
+
+        GetComponent<TrailRenderer>().material.SetColor("_TintColor", trailColour);
     }
     public void SetSpeed(float newSpeed)
     {
@@ -39,27 +42,18 @@ public class Projectile : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, moveDistance + skinWidth, collisionMask, QueryTriggerInteraction.Collide))
         {
-            OnHitObject(hit);
+            OnHitObject(hit.collider, hit.point);
         }
     }
 
-    void OnHitObject(RaycastHit hit)
-    {
-        //print(hit.collider.gameObject.name);
-        IDamagable damagableObject = hit.collider.GetComponent<IDamagable>();
-        if (damagableObject != null)
-        {
-            damagableObject.TakeHit(damage, hit);
-        }
-        GameObject.Destroy(gameObject);
-    }
+
     //Raycast 를 쓰지 않는 메소드 생성
-    void OnHitObject(Collider c)
+    void OnHitObject(Collider c, Vector3 hitPoint)
     {
         IDamagable damagableObject = c.GetComponent<IDamagable>();
         if (damagableObject != null)
         {
-            damagableObject.TakeDamage(damage);
+            damagableObject.TakeHit(damage, hitPoint, transform.forward);
         }
         GameObject.Destroy(gameObject);
     }
