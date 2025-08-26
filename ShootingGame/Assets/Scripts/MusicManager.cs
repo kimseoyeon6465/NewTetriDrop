@@ -9,6 +9,8 @@ public class MusicManager : MonoBehaviour
 
     void Start()
     {
+
+
         AudioManager.instance.PlayMusic(menuTheme, 2);
     }
 
@@ -16,7 +18,7 @@ public class MusicManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            AudioManager.instance.PlayMusic(mainTheme, 2);
+            AudioManager.instance.PlayMusic(mainTheme, 3);
         }
     }
 }
