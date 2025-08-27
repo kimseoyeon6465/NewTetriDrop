@@ -11,12 +11,17 @@ public class GameUI : MonoBehaviour
     public RectTransform newWaveBanner;//UI 용  Transform
     public Text newWaveTitle;
     public Text newWaveEnemyCount;
+    public Text scoreUI;
+    public Text gameOverScoreUI;
+    public RectTransform healthBar;
 
     Spawner spawner;
+    Player player;
 
     void Start()
     {
-        FindObjectOfType<Player>().OnDeath += OnGameOver;
+        player = FindObjectOfType<Player>();
+        player.OnDeath += OnGameOver;
     }
 
     private void Awake()
@@ -25,6 +30,16 @@ public class GameUI : MonoBehaviour
         spawner.OnNewWave += OnNewWave;
     }
 
+    private void Update()
+    {
+        scoreUI.text = ScoreKeeper.score.ToString("D6");
+        float healthPercent = 0;
+        if (player != null)
+        {
+            healthPercent = player.health / player.startingHealth;
+        }
+        healthBar.localScale = new Vector3(healthPercent, 1, 1);
+    }
     void OnNewWave(int waveNumber)
     {
         string[] numbers = { "One", "Two", "Three", "Four", "Five" };
@@ -43,10 +58,10 @@ public class GameUI : MonoBehaviour
         int dir = 1;
 
         float endDelayTime = Time.time + 1 / speed + delayTime;
-        while(animatePercent>=0)
+        while (animatePercent >= 0)
         {
             animatePercent += Time.deltaTime * speed * dir;
-            if(animatePercent>=1)
+            if (animatePercent >= 1)
             {
                 animatePercent = 1;
                 if (Time.time > endDelayTime)
@@ -54,14 +69,18 @@ public class GameUI : MonoBehaviour
                     dir = -1;
                 }
             }
-            newWaveBanner.anchoredPosition = Vector2.up*Mathf.Lerp(-170, 45, animatePercent);//UI의 위치를 조정할 때는 anchoredPosition
+            newWaveBanner.anchoredPosition = Vector2.up * Mathf.Lerp(-170, 45, animatePercent);//UI의 위치를 조정할 때는 anchoredPosition
             yield return null;
         }
 
     }
     void OnGameOver()
     {
-        StartCoroutine(Fade(Color.clear, Color.black, 1));
+        Cursor.visible = true;
+        StartCoroutine(Fade(Color.clear, new Color(0, 0, 0, .95f), 1));
+        gameOverScoreUI.text = scoreUI.text;
+        scoreUI.gameObject.SetActive(false);
+        healthBar.transform.parent.gameObject.SetActive(false);
         gameOverUI.SetActive(true);
     }
 
@@ -69,18 +88,24 @@ public class GameUI : MonoBehaviour
     {
         float speed = 1 / time;
         float percent = 0;
-        while(percent<1)
+        while (percent < 1)
         {
-            percent += Time.deltaTime*speed;
-            fadePlane.color = Color.Lerp(from,to,percent);
+            percent += Time.deltaTime * speed;
+            fadePlane.color = Color.Lerp(from, to, percent);
             yield return null;
         }
     }
-    
+
 
     //UI Input
     public void StartNewGame()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene("Menu");
+
     }
 }
