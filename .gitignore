@@ -45,4 +45,3 @@ Thumbs.db
 *.aab
 *.app
 *.unitypackage
-/Genshin/Assets/Scripts/Characters/Player/StateMachines/Movement/States/Grounded/Moving/PlayerDashingState.cs
